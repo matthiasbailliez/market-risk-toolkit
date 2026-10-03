@@ -1,10 +1,4 @@
-"""
-Module ANALYSE : le chef d'orchestre.
-
-Il ne contient aucun calcul nouveau. Il appelle les autres modules dans
-l'ordre et rassemble leurs résultats en un seul bilan. C'est le seul
-fichier à modifier quand on ajoutera de nouveaux outils au projet.
-"""
+"""Assemble les mesures de risque et de performance en un bilan unique."""
 
 from .format_fr import euros, nombre, pct
 from .performance import drawdown_maximal, rendement_annualise, ratio_sharpe
@@ -13,14 +7,11 @@ from .risque import expected_shortfall, var_gaussienne, var_historique, volatili
 
 def analyser_portefeuille(rendements, confiance=0.99, taux_sans_risque=0.0, capital=10_000):
     """
-    Produit le bilan risque / performance complet d'une série de rendements.
+    Bilan risque / performance d'une série de rendements quotidiens.
 
-    rendements       : rendements quotidiens du portefeuille
     confiance        : niveau de confiance de la VaR et de l'ES (0.99 = 99 %)
     taux_sans_risque : taux annuel utilisé dans le ratio de Sharpe
-    capital          : montant investi, pour traduire les pourcentages en euros
-
-    Renvoie un dictionnaire contenant toutes les mesures.
+    capital          : montant investi, pour exprimer les pertes en euros
     """
     var_hist = var_historique(rendements, confiance)
     var_norm = var_gaussienne(rendements, confiance)
@@ -32,14 +23,12 @@ def analyser_portefeuille(rendements, confiance=0.99, taux_sans_risque=0.0, capi
         "nombre_jours": len(rendements),
         "confiance": confiance,
         "capital": capital,
-        # Performance
         "rendement_annualise": rendement_annualise(rendements),
         "volatilite_annualisee": volatilite_annualisee(rendements),
         "sharpe": ratio_sharpe(rendements, taux_sans_risque),
         "drawdown_max": chute["drawdown_max"],
         "date_sommet": chute["date_sommet"],
         "date_creux": chute["date_creux"],
-        # Risque (pertes positives, sur un jour)
         "var_historique": var_hist,
         "var_gaussienne": var_norm,
         "expected_shortfall": es,
@@ -47,7 +36,7 @@ def analyser_portefeuille(rendements, confiance=0.99, taux_sans_risque=0.0, capi
 
 
 def afficher_bilan(bilan):
-    """Affiche le bilan dans le terminal, sous forme lisible."""
+    """Affiche le bilan dans le terminal."""
     c = pct(bilan["confiance"], 0)
     k = bilan["capital"]
     debut, fin = bilan["periode"]
@@ -69,7 +58,7 @@ def afficher_bilan(bilan):
 
 
 def tableau_markdown(bilan):
-    """Renvoie le bilan sous forme de tableau Markdown, prêt à coller dans le README."""
+    """Bilan au format tableau Markdown."""
     c = pct(bilan["confiance"], 0)
     k = bilan["capital"]
     lignes = [

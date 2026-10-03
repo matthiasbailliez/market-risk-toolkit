@@ -1,6 +1,6 @@
 # market-risk-toolkit
 
-**Outil Python d'analyse du risque de marché d'un portefeuille : Value at Risk, Expected Shortfall, ratio de Sharpe, drawdown — puis grecs et couverture.**
+**Outil Python d'analyse du risque de marché d'un portefeuille : Value at Risk, Expected Shortfall, ratio de Sharpe, drawdown.**
 
 Projet personnel en cours, mené en parallèle de mon Master Finance Quantitative — Analyse du Risque de Marché (Université de Montpellier).
 
@@ -8,14 +8,14 @@ Projet personnel en cours, mené en parallèle de mon Master Finance Quantitativ
 
 ## Objectif
 
-Sur les marchés, un rendement n'a de sens qu'au regard du risque pris pour l'obtenir. Ce projet construit, brique par brique, un outil qui répond aux questions que se pose un gestionnaire de risque face à un portefeuille :
+Sur les marchés, un rendement n'a de sens qu'au regard du risque pris pour l'obtenir. Ce projet construit un outil qui répond aux questions d'un gestionnaire de risque face à un portefeuille :
 
 - **Combien puis-je perdre demain, dans 99 % des cas ?** → Value at Risk
 - **Et dans le 1 % restant, combien je perds en moyenne ?** → Expected Shortfall
 - **Suis-je correctement rémunéré pour le risque pris ?** → ratio de Sharpe
 - **Quelle a été la pire chute traversée ?** → drawdown maximal
 
-C'est un outil d'**analyse**, pas un robot de trading : il ne cherche pas à prédire les prix, mais à mesurer le risque de façon rigoureuse — et à dire honnêtement où ces mesures atteignent leurs limites.
+C'est un outil d'**analyse**, il ne cherche ainsi pas à prédire les prix, mais à mesurer le risque et à dire où ces mesures atteignent leurs limites.
 
 ---
 
@@ -61,7 +61,7 @@ Le rendement du portefeuille est la moyenne pondérée des rendements de ses act
 
 &nbsp;&nbsp;&nbsp;&nbsp;VaR₉₉ = − (μ + z₀,₀₁ · σ),&nbsp;&nbsp;&nbsp;avec z₀,₀₁ ≈ −2,33
 
-Comparer les deux VaR est instructif : les rendements financiers ont des queues plus épaisses que la loi normale, si bien que la VaR gaussienne sous-estime souvent le risque extrême.
+Comparer les deux VaR : les rendements financiers ont des queues plus épaisses que la loi normale, si bien que la VaR gaussienne sous-estime souvent le risque extrême.
 
 **Expected Shortfall.** Perte moyenne lors des jours qui dépassent la VaR :
 
@@ -116,13 +116,13 @@ Pour étudier un autre portefeuille, il suffit de modifier le dictionnaire `PORT
 python -m pytest
 ```
 
-Chaque formule est vérifiée sur un cas dont la réponse est connue à l'avance : calcul à la main (rendements, drawdown), formule fermée de la loi normale (VaR gaussienne), propriétés mathématiques (l'Expected Shortfall est toujours supérieure à la VaR, la VaR croît avec le niveau de confiance).
+Chaque formule est vérifiée sur un cas dont la réponse est connue à l'avance : calcul à la main (rendements, drawdown), formule fermée de la loi normale (VaR gaussienne), propriétés mathématiques.
 
 ---
 
 ## Feuille de route
 
-**Phase 1 — Mesures de base** ✅
+**Phase 1 — Mesures de base** 
 - [x] Rendements et agrégation en portefeuille
 - [x] Volatilité annualisée, VaR historique, VaR gaussienne, Expected Shortfall
 - [x] Ratio de Sharpe, drawdown maximal
@@ -150,8 +150,8 @@ Chaque formule est vérifiée sur un cas dont la réponse est connue à l'avance
 - **Les mesures ne sont pas encore validées hors échantillon.** Elles décrivent le risque passé ; le backtest de la phase 2 dira si elles auraient correctement anticipé le risque futur.
 - **La VaR historique ne peut pas anticiper une perte plus forte que celles déjà observées** : sa qualité dépend entièrement de la période choisie.
 - **La VaR gaussienne suppose des rendements normaux**, hypothèse connue pour sous-estimer les pertes extrêmes.
-- **La règle de la racine du temps (√252) suppose des rendements indépendants.** Or la volatilité des marchés évolue par grappes (une journée agitée est souvent suivie d'autres) ; c'est l'objet du modèle GARCH prévu en phase 4.
-- **Le portefeuille est supposé rééquilibré chaque jour à poids fixes, sans frais de transaction.**
+- **La règle de la racine du temps (√252) suppose des rendements indépendants.** Or la volatilité des marchés évolue par grappes, ainsi une journée agitée est souvent suivie d'autres.
+- **Hypothèse : Le portefeuille est rééquilibré chaque jour à poids fixes, sans frais de transaction.**
 - **Les données proviennent de Yahoo Finance**, une source gratuite non auditée ; le taux sans risque utilisé dans le Sharpe est une hypothèse fixée à la main.
 
 ---

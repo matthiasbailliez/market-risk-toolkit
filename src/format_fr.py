@@ -1,7 +1,4 @@
-"""
-Petites fonctions d'affichage à la française : virgule décimale, espace avant « % »
-et espace comme séparateur de milliers (6,78 % ; 10 000 €).
-"""
+"""Mise en forme des nombres à la française : 6,78 % ; 10 000 €."""
 
 
 def pct(x, decimales=2):

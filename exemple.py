@@ -1,11 +1,7 @@
 """
-Exemple complet : analyse du risque d'un portefeuille de quatre actions françaises.
+Analyse d'un portefeuille équipondéré de quatre actions françaises.
 
-Lancer depuis le dossier du projet :
-    python exemple.py
-
-Le script télécharge les prix, calcule le bilan risque / performance,
-l'affiche, et enregistre le graphique dans figures/.
+Usage : python exemple.py
 """
 
 from pathlib import Path
@@ -15,19 +11,16 @@ from src.donnees import charger_prix_yahoo, rendements_portefeuille, rendements_
 from src.format_fr import pct
 from src.visualisation import tracer_distribution
 
-# ---------------------------------------------------------------------------
-# Paramètres de l'analyse — c'est ici qu'on change le portefeuille étudié
-# ---------------------------------------------------------------------------
 PORTEFEUILLE = {
     "TTE.PA": 0.25,  # TotalEnergies — énergie
     "MC.PA": 0.25,   # LVMH — luxe
     "SAN.PA": 0.25,  # Sanofi — santé
     "AIR.PA": 0.25,  # Airbus — aéronautique
 }
-DEBUT = "2020-01-01"      # inclut le krach du Covid de mars 2020
+DEBUT = "2020-01-01"
 CONFIANCE = 0.99
-TAUX_SANS_RISQUE = 0.02   # hypothèse : taux court terme annuel en euros, à ajuster
-CAPITAL = 10_000          # en euros
+TAUX_SANS_RISQUE = 0.02   # hypothèse de taux court terme annuel
+CAPITAL = 10_000          # euros
 
 
 def main():
